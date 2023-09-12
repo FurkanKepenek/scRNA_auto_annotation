@@ -28,6 +28,7 @@ hdf5_obj <- Read10X_h5(filename = "20k_PBMC_3p_HT_nextgem_Chromium_X_filtered_fe
                        unique.features = TRUE)
 
 # create seurat object of hdf5 object
+
 pmbc_seurat <- CreateSeuratObject(counts = hdf5_obj)
 
 # calculate the mitochondrial percentage of data
@@ -102,17 +103,17 @@ pbmc_counts <- GetAssayData(pmbc_seurat_filtered, slot = 'counts')
 # ref will be our reference which taken from "celldex", labels will be the lables 
 # from reference data -there will be label.main column- 
 
-pred <- SingleR(test = pbmc_counts,
+single_data <- SingleR(test = pbmc_counts,
         ref = ref,
         labels = ref$label.main)
 
 # observe the result, SingleR gives S4 object as a result
 
-pred
+single_data
 
 # provide labels for main data
 
-pmbc_seurat_filtered$singleR.labels <- pred$labels[match(rownames(pmbc_seurat_filtered@meta.data), rownames(pred))]
+pmbc_seurat_filtered$singleR.labels <- single_data$labels[match(rownames(pmbc_seurat_filtered@meta.data), rownames(single_data))]
 
 # create plot with labelled cells  
 
@@ -120,21 +121,21 @@ DimPlot(pmbc_seurat_filtered, reduction = 'umap', group.by = 'singleR.labels')
 
 # see the scores of cells
 
-pred
-pred$scores
+single_data
+single_data$scores
 
 # to see ambiguity create score heatmap, each little part represents cells 
 
-plotScoreHeatmap(pred)
+plotScoreHeatmap(single_data)
 
 
 # according to delta scores between cells create delta distribution plot
 
-plotDeltaDistribution(pred)
+plotDeltaDistribution(single_data)
 
 # comparing cell scores with unsupervised clustering
 
-tab <- table(Assigned=pred$labels, Clusters=pmbc_seurat_filtered$seurat_clusters)
+tab <- table(Assigned=single_data$labels, Clusters=pmbc_seurat_filtered$seurat_clusters)
 pheatmap(log10(tab+10), color = colorRampPalette(c('white','blue'))(10))
 
 

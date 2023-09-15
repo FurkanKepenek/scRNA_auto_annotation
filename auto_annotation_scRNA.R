@@ -1,4 +1,4 @@
-# script to annotate cell types from 20k Human PBMCs from a healthy female donor
+# Script for automatic cell annotation in single cell RNA-seq
 # https://www.10xgenomics.com/resources/datasets/20-k-human-pbm-cs-3-ht-v-3-1-chromium-x-3-1-high-6-1-0 /// Data is available here. 
 # There could be a form to reach data, fill the form then download the "Feature / cell matrix HDF5 (filtered)" data
 # needed packages will be installed from bioconductor repo with codes given below
